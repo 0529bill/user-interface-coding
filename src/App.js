@@ -1,5 +1,6 @@
 import { AutoComplete } from "./AutoComplete";
 import styled from "styled-components";
+import { useState } from "react";
 
 const MainContainer = styled.div`
   display: flex;
@@ -22,14 +23,27 @@ const StyledButton = styled.button`
   margin-left: 16px;
 `;
 
+const StyledHeader = styled.div`
+  font-size: 2rem;
+`;
+
 function App() {
+  const [selectedValue, setSelectedValue] = useState("");
+
   return (
     <MainContainer className="App">
       <AutoCompleteContainer>
-        <h1>AutoComplete</h1>
+        <StyledHeader>AutoComplete</StyledHeader>
         <AutoCompleteWrapper>
-          <AutoComplete />
-          <StyledButton>Submit</StyledButton>
+          <AutoComplete
+            setSelectedValue={setSelectedValue}
+            selectedValue={selectedValue}
+          />
+          <div style={{ margin: "10px" }}>
+            <span>Current Selected Value:</span>
+            <span>{selectedValue}</span>
+          </div>
+          {/* <StyledButton>Submit</StyledButton> */}
         </AutoCompleteWrapper>
       </AutoCompleteContainer>
     </MainContainer>

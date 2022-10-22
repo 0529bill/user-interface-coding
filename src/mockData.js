@@ -21462,14 +21462,12 @@ const mockData = {
 
 const handleMockData = ({ keyword, limit, startCount }, mockData) => {
   let reg = new RegExp(`^${keyword}(.*)`, "i");
-  console.log("reg", reg);
   const filteredMockData = mockData.user.filter((item) => {
     if (item.name.match(reg)) {
       return item;
     }
     return false;
   });
-  console.log("filteredMockData", filteredMockData);
   return filteredMockData.slice(startCount, startCount + limit);
 };
 
