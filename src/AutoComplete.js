@@ -6,7 +6,9 @@ import {
 import styled, { css } from "styled-components";
 
 import { getMockData } from "./mockData";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+
+import usePrevious from "./usePrevious";
 
 const StyledUl = styled.ul`
   display: flex;
@@ -59,6 +61,8 @@ const StyledDropDown = styled.div`
         color: #808080c9;
         overflow: hidden;
         border-radius: 0px 0px 15px 15px;
+        max-height: 300px;
+        overflow: scroll;
       `;
   }}
 `;
@@ -70,17 +74,36 @@ const InputWrapper = styled.div`
 function AutoComplete({ setSelectedValue, selectedValue }) {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [dropDownData, setDropDownData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  //keyword in input
   const [onClickedValue, setOnClickedValue] = useState("");
+
+  const prevClickedValue = usePrevious(onClickedValue);
+
+  const [offset, setOffset] = useState(0);
+
+  const observer = useRef();
 
   const handleChangeInputState = ({ target: { value } }) => {
     setOnClickedValue(value);
     setSelectedValue("");
   };
 
-  const handleGetMockData = async (inputState) => {
-    let data = await getMockData({ keyword: inputState });
-    setDropDownData(data);
-  };
+  const handleGetMockData = useCallback(
+    async (inputState = "", offset = 0) => {
+      let MockData = await getMockData({ keyword: inputState, offset });
+      setHasMore(MockData?.hasMore);
+      if (!MockData?.hasMore) return;
+      if (!MockData?.data) return;
+      if (prevClickedValue === onClickedValue) {
+        setDropDownData((data) => [...data, ...MockData?.data]);
+      } else {
+        setDropDownData(MockData?.data);
+      }
+    },
+    [onClickedValue, prevClickedValue]
+  );
 
   const handleRemoveSingleData = (index) => {
     setDropDownData((dropDownData) =>
@@ -93,9 +116,28 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
     setSelectedValue(name);
   };
 
+  const lastElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (!hasMore) return;
+        if (entries[0].isIntersecting) {
+          setOffset((t) => t + 20);
+          handleGetMockData(onClickedValue, offset + 20);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [handleGetMockData, hasMore, offset, onClickedValue]
+  );
+
   useEffect(() => {
+    setOffset(0);
     handleGetMockData(onClickedValue);
-  }, [onClickedValue]);
+  }, [handleGetMockData, onClickedValue]);
+
+  useEffect(() => {});
 
   return (
     <div
@@ -129,7 +171,12 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
             return (
               firstChar &&
               secondChar && (
-                <StyledUl key={index}>
+                <StyledUl
+                  key={index}
+                  ref={
+                    dropDownData?.length === index + 1 ? lastElementRef : null
+                  }
+                >
                   <span
                     style={{
                       display: "flex",
@@ -145,7 +192,6 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
                     >
                       <ClockCircleOutlined style={{ color: "#808080c9" }} />
                       <StyledLi>
-                        {/* {inputData?.name} */}
                         <span style={{ fontWeight: "bold" }}>{firstChar}</span>
                         <span>{secondChar}</span>
                       </StyledLi>
