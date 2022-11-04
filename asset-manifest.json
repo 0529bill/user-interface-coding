@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/user-interface-coding/static/css/main.66eb03b7.css",
+    "main.js": "/user-interface-coding/static/js/main.11a9b74d.js",
+    "index.html": "/user-interface-coding/index.html",
+    "main.66eb03b7.css.map": "/user-interface-coding/static/css/main.66eb03b7.css.map",
+    "main.11a9b74d.js.map": "/user-interface-coding/static/js/main.11a9b74d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66eb03b7.css",
+    "static/js/main.11a9b74d.js"
+  ]
+}
