@@ -21463,23 +21463,19 @@ const mockData = {
 const handleMockData = ({ keyword, limit, offset }, mockData) => {
   let reg = new RegExp(`^${keyword}(.*)`, "i");
   const filteredMockData = mockData.user.filter((item) => {
-    if (item.name.match(reg)) {
+    if (item.name.match(reg)?.length > 0) {
       return item;
     }
     return false;
   });
-  console.log("filteredMockData", filteredMockData);
-  console.log("offset", offset);
-  console.log("limit", limit);
   return {
     data: filteredMockData.slice(offset, offset + limit),
     totalCount: filteredMockData.length,
-    hasMore: filteredMockData.length - offset < limit ?   false: true,
+    hasMore: filteredMockData.length - offset < limit ? false : true,
   };
 };
 
 const getMockData = ({ keyword, limit = 20, offset = 0 }) => {
-  console.log("keyword", keyword);
   if (!keyword) return { data: null };
   return new Promise((resolve) => {
     setTimeout(() => {

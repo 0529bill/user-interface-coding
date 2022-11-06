@@ -7,6 +7,9 @@ const MainContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: "Roboto Slab", serif;
+  font-family: "Source Code Pro", monospace;
+  /* box-sizing: "content-box"; */
 `;
 
 const AutoCompleteContainer = styled.div`
@@ -16,11 +19,6 @@ const AutoCompleteContainer = styled.div`
 
 const AutoCompleteWrapper = styled.div`
   display: flex;
-`;
-
-const StyledButton = styled.button`
-  height: 25px;
-  margin-left: 16px;
 `;
 
 const StyledHeader = styled.div`
@@ -43,7 +41,6 @@ function App() {
             <span>Current Selected Value:</span>
             <span>{selectedValue}</span>
           </div>
-          {/* <StyledButton>Submit</StyledButton> */}
         </AutoCompleteWrapper>
       </AutoCompleteContainer>
     </MainContainer>
