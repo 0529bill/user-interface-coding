@@ -1,14 +1,15 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import {
   ClockCircleOutlined,
   CloseOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import styled, { css } from "styled-components";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import debounce from "./debounce";
 import { getMockData } from "./mockData";
-import { useEffect, useState, useCallback, useRef } from "react";
-
 import usePrevious from "./usePrevious";
 
 const StyledUl = styled.ul`
@@ -114,9 +115,9 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
 
       setHasMore(MockData?.hasMore);
 
-      if (!hasMore) {
-        return;
-      }
+      // if (!hasMore) {
+      //   return;
+      // }
 
       if (!MockData?.data) {
         setDropDownData([]);
@@ -129,7 +130,7 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
         setDropDownData(MockData?.data);
       }
     },
-    [hasMore, onClickedValue, prevClickedValue]
+    [onClickedValue, prevClickedValue]
   );
 
   const handleRemoveSingleData = (index) => {
@@ -204,10 +205,10 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
             let firstChar = onClickedValue;
             let secondChar = inputData?.name.slice(onClickedValue?.length);
 
-            if (firstChar.length > inputData?.name?.length) {
-              setOpenDropdown(false);
-              return;
-            }
+            // if (firstChar.length > inputData?.name?.length) {
+            //   setOpenDropdown(false);
+            //   return;
+            // }
             return (
               <StyledUl
                 key={index}
