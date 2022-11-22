@@ -139,27 +139,22 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
     );
   };
 
-  // const lastElementRef = useCallback(
-  //   (node) => {
-  //     if (observer.current) observer.current.disconnect();
+  const lastElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
 
-  //     observer.current = new IntersectionObserver((entries) => {
-  //       if (!hasMore) return;
-  //       if (entries[0].isIntersecting) {
-  //         setOffset((t) => t + 20);
-  //         handleGetMockData(onClickedValue, offset + 20);
-  //       }
-  //     });
-  //     if (node) observer.current.observe(node);
-  //   },
-  //   [handleGetMockData, hasMore, offset, onClickedValue]
-  // );
+      observer.current = new IntersectionObserver((entries) => {
+        if (!hasMore) return;
+        if (entries[0].isIntersecting) {
+          setOffset((t) => t + 20);
+          handleGetMockData(onClickedValue, offset + 20);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [handleGetMockData, hasMore, offset, onClickedValue]
+  );
 
-  console.log("dropDownData", dropDownData);
-  console.log("openDropdown", openDropdown);
-  console.log("selectedValue", selectedValue);
-
-  console.log("onClickedValue", onClickedValue);
   const renderInput = () => {
     return (
       <InputWrapper>
@@ -212,9 +207,7 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
             return (
               <StyledUl
                 key={index}
-                // ref={
-                //   dropDownData?.length === index + 1 ? lastElementRef : null
-                // }
+                ref={dropDownData?.length === index + 1 ? lastElementRef : null}
               >
                 <span
                   style={{
@@ -250,6 +243,7 @@ function AutoComplete({ setSelectedValue, selectedValue }) {
     );
   }, [
     dropDownData,
+    lastElementRef,
     onClickedValue,
     openDropdown,
     selectedValue,
